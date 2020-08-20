@@ -1,0 +1,72 @@
+# macOS .bashrc
+
+## PATH: homebrew > system > ~/bin
+# add /usr/local/bin if not present
+if [ "${PATH#*\/usr\/local\/bin}" = "$PATH" ]
+then
+	export PATH="/usr/local/bin:$PATH"
+fi
+
+# add /usr/local/sbin if not present
+if [ "${PATH#*\/usr\/local\/sbin}" = "$PATH" ]
+then
+	export PATH="/usr/local/sbin:$PATH"
+fi
+
+# add ~/bin
+export PATH="$PATH:~/bin"
+
+## development environment
+# init rbenv if present
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# init pyenv if present
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
+# golang
+export GOPATH=~/go
+export PATH=$PATH:$GOPATH/bin
+
+# load Github access token (if present)
+if [ -f $HOME/.githubtokenrc ]; then . $HOME/.githubtokenrc; fi
+
+# init docker-machine if present
+if which docker-machine > /dev/null
+then
+    if [ "$(docker-machine status default 2>/dev/null)" == "Running" ]; then eval $(docker-machine env default); fi
+fi
+
+## other environment
+export PAGER="less -is"
+export EDITOR=/usr/bin/vim
+export RSYNC_RSH=/usr/bin/ssh
+
+## command line
+# improved support for hh from "hh -s"
+export HH_CONFIG=hicolor         # get more colors
+shopt -s histappend              # append new history items to .bash_history
+export HISTCONTROL=ignorespace   # leading space hides commands from history
+export HISTFILESIZE=10000        # increase history file size (default is 500)
+export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
+
+# load autocompletion scripts
+# don't load by default
+#for i in /usr/local/etc/bash_completion.d/*
+#do
+#	. $i
+#done
+
+# Homebrew options, aliases
+export HOMEBREW_CLEANUP_MAX_AGE_DAYS=36500 # set to 100 years since permanent is not an option
+alias update='brew update && brew outdated --greedy'
+alias upgrade='brew upgrade --greedy && brew cleanup'
+alias leaves='brew leaves | diff -u ~/bin/`hostname -s`-brew  - ; brew cask list | diff -u ~/bin/`hostname -s`-cask -'
+alias check='brew doctor ; brew bundle check --global ; brew bundle cleanup --global'
+alias cleanup='brew bundle install --global && brew bundle cleanup --global --force && brew cleanup -s'
+alias fetch='brew fetch `brew list` && brew cask fetch `brew cask list`'
+
+# helpful aliases
+alias dir='ls -lA'
+alias psax='ps -axo pid,tt,stat,time,start,user,command'
+alias tcpopen='sudo lsof -n -iTCP -sTCP:LISTEN'
+alias tcpall='sudo lsof -n -iTCP'

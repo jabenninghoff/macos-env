@@ -1,0 +1,4 @@
+# macOS .profile
+
+# load .bashrc
+. ~/.bashrc
