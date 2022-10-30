@@ -1,0 +1,70 @@
+# macOS .zshrc
+
+## PATH: homebrew > system > ~/bin
+# add /usr/local/bin if not present
+if [ "${PATH#*\/usr\/local\/bin}" = "$PATH" ]
+then
+	export PATH="/usr/local/bin:$PATH"
+fi
+
+# add /usr/local/sbin if not present
+if [ "${PATH#*\/usr\/local\/sbin}" = "$PATH" ]
+then
+	export PATH="/usr/local/sbin:$PATH"
+fi
+
+# add ~/bin
+export PATH="$PATH:$HOME/bin"
+
+## development environment
+# init rbenv if present
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# init pyenv if present
+if which pyenv > /dev/null
+then
+	export PYENV_ROOT="$HOME/.pyenv"
+	export PATH="$PYENV_ROOT/bin:$PATH"
+	eval "$(pyenv init --path)"
+fi
+
+# golang
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+# load Github access token (if present)
+if [ -f $HOME/.githubtokenrc ]; then . $HOME/.githubtokenrc; fi
+
+## other environment
+export PAGER="less -is"
+export EDITOR=/usr/bin/vim
+export RSYNC_RSH=/usr/bin/ssh
+
+## command line
+# improved support for hh from "hh -s"
+# HSTR configuration - add this to ~/.zshrc
+alias hh=hstr				# hh to be alias for hstr
+setopt histignorespace			# skip cmds w/ leading space from history
+export HSTR_CONFIG=hicolor		# get more colors
+bindkey -s "\C-r" "\C-a hstr -- \C-j"	# bind hstr to Ctrl-r (for Vi mode check doc)
+
+# support for https://github.com/bamos/zsh-history-analysis
+export HISTSIZE=1000000
+export SAVEHIST=$HISTSIZE
+setopt EXTENDED_HISTORY
+
+# Homebrew options, aliases
+if [ -f $HOME/.brewrc ]; then . $HOME/.brewrc; fi
+export HOMEBREW_CLEANUP_MAX_AGE_DAYS=36500 # set to 100 years since permanent is not an option
+alias update='brew update && brew outdated --greedy-auto-updates'
+alias upgrade='brew upgrade --greedy-auto-updates && brew cleanup'
+alias leaves='brew leaves | diff -u ~/bin/`hostname -s`-brew  - ; brew list --cask | diff -u ~/bin/`hostname -s`-cask -'
+alias check='brew doctor ; brew bundle check --global --verbose ; brew bundle cleanup --global'
+alias cleanup='brew bundle install --global && brew bundle cleanup --global --force && brew cleanup -s'
+alias fetch='brew fetch --formula `brew list --formula` && brew fetch --cask `brew list --cask`'
+
+# helpful aliases
+alias dir='ls -lAG'
+alias psax='ps -axo pid,tt,stat,time,start,user,command'
+alias tcpopen='sudo lsof -n -iTCP -sTCP:LISTEN'
+alias tcpall='sudo lsof -n -iTCP'
