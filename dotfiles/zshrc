@@ -52,12 +52,13 @@ export EDITOR=/usr/bin/vim
 export RSYNC_RSH=/usr/bin/ssh
 
 ## command line
-# improved support for hh from "hh -s"
+# improved support for hh from `hh -s`
 # HSTR configuration - add this to ~/.zshrc
 alias hh=hstr				# hh to be alias for hstr
 setopt histignorespace			# skip cmds w/ leading space from history
 export HSTR_CONFIG=hicolor		# get more colors
 bindkey -s "\C-r" "\C-a hstr -- \C-j"	# bind hstr to Ctrl-r (for Vi mode check doc)
+export HSTR_TIOCSTI=y
 
 # support for https://github.com/bamos/zsh-history-analysis
 export HISTSIZE=1000000
@@ -66,6 +67,7 @@ setopt EXTENDED_HISTORY
 
 # Homebrew options, aliases
 if [ -f $HOME/.brewrc ]; then . $HOME/.brewrc; fi
+# export HOMEBREW_FORCE_BREWED_CURL=1 # to fix a curl cert error: https://github.com/Homebrew/brew/issues/7667
 export HOMEBREW_CLEANUP_MAX_AGE_DAYS=36500 # set to 100 years since permanent is not an option
 alias update='brew update && brew outdated --greedy-auto-updates'
 alias upgrade='brew upgrade --greedy-auto-updates && brew cleanup'
