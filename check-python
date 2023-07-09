@@ -1,0 +1,11 @@
+#!/bin/sh
+LATEST=`pyenv latest -k 3`
+GLOBAL=`pyenv global`
+
+if [ "x${GLOBAL}" == "x${LATEST}" ]
+then
+	exit 0
+else
+	echo "installed python version (${GLOBAL}) does not match latest version (${LATEST})"
+	exit 1
+fi

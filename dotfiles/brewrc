@@ -1,0 +1,6 @@
+#!/bin/sh
+# workaround for R cask in /usr/local
+export BREW_DOCTOR_CHECKS=`brew doctor --list-checks | grep -v check_for_stray | xargs`
+
+# workaround for issues from https://github.com/Homebrew/brew/issues/14447 
+export HOMEBREW_NO_INSTALL_FROM_API=1
