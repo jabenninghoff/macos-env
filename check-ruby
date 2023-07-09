@@ -1,0 +1,13 @@
+#!/bin/sh
+STABLE=`rbenv install -l | grep '^\d' | xargs`
+STABLE_VER=`rbenv versions --bare | egrep "${STABLE// /|}" | xargs`
+ALL_VER=`rbenv versions --bare | xargs`
+
+if [ "x${STABLE_VER}" == "x${STABLE}" ]
+then
+	exit 0
+else
+	echo "installed ruby versions (${ALL_VER}) do not include all stable versions (${STABLE})"
+	echo "installed stable versions: ${STABLE_VER}"
+	exit 1
+fi
