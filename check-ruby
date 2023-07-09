@@ -9,5 +9,6 @@ then
 else
 	echo "installed ruby versions (${ALL_VER}) do not include all stable versions (${STABLE})"
 	echo "installed stable versions: ${STABLE_VER}"
+	echo "to install:\n  for v in \`rbenv install -l | grep '^\d'\`; do rbenv install \$v; done\n"
 	exit 1
 fi
