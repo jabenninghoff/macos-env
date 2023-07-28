@@ -7,6 +7,7 @@ then
 	exit 0
 else
 	echo "installed python version (${GLOBAL}) does not match latest version (${LATEST})"
-	echo "to install:\n  pyenv install ${LATEST}\n"
+	echo "to install:\n  pyenv install ${LATEST} && pyenv global ${LATEST}"
+	echo "or:\n  brew pyenv-sync && pyenv global ${LATEST}\n"
 	exit 1
 fi

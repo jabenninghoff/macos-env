@@ -1,14 +1,13 @@
 #!/bin/sh
-STABLE=`rbenv install -l | grep '^\d' | xargs`
-STABLE_VER=`rbenv versions --bare | egrep "${STABLE// /|}" | xargs`
-ALL_VER=`rbenv versions --bare | xargs`
+LATEST=`rbenv install -l | grep '^\d' | tail -1`
+GLOBAL=`rbenv global`
 
-if [ "x${STABLE_VER}" == "x${STABLE}" ]
+if [ "x${GLOBAL}" == "x${LATEST}" ]
 then
 	exit 0
 else
-	echo "installed ruby versions (${ALL_VER}) do not include all stable versions (${STABLE})"
-	echo "installed stable versions: ${STABLE_VER}"
-	echo "to install:\n  for v in \`rbenv install -l | grep '^\d'\`; do rbenv install \$v; done\n"
+	echo "installed ruby version (${GLOBAL}) does not match latest version (${LATEST})"
+	echo "to install:\n  rbenv install ${LATEST} && rbenv global ${LATEST}"
+	echo "or:\n  brew rbenv-sync && rbenv global ${LATEST}\n"
 	exit 1
 fi
