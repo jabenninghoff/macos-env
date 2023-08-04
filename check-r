@@ -1,0 +1,14 @@
+#!/bin/sh
+LATEST=`rig resolve release --json | jq -r '.[-1].version'`
+GLOBAL=`rig list --json | jq -r '.[-1].version'`
+
+if [ "x${GLOBAL}" == "x${LATEST}" ]
+then
+	exit 0
+else
+	echo "installed R version (${GLOBAL}) does not match latest version (${LATEST})"
+	echo "to install:\n  rig install --without-pak ${LATEST} && rig default ${LATEST}"
+	echo "post-install:"
+	echo "  sudo chown -R \`whoami\`:admin /Library/Frameworks/R.framework/Versions/${LATEST}/Resources/library\n"
+	exit 1
+fi
