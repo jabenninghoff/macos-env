@@ -14,6 +14,7 @@ brew "git"
 brew "go"
 brew "harfbuzz" # required for R pkgdown
 brew "hstr"
+brew "jq"
 brew "libgit2" # required for R devtools
 brew "libomp" # required for R data.table
 brew "lorem"

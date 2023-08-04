@@ -6,6 +6,7 @@ export HOMEBREW_CLEANUP_MAX_AGE_DAYS=36500 # set to 100 years since permanent is
 # terminate script on any failure
 brew update && brew doctor ${BREW_DOCTOR_CHECKS} && brew upgrade --greedy-auto-updates && brew cleanup && mas upgrade && brew doctor ${BREW_DOCTOR_CHECKS}
 
-# check if python and ruby are up to date
+# check if python, ruby, and R are up to date
 check-python
 check-ruby
+check-r
