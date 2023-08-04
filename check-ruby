@@ -1,4 +1,6 @@
 #!/bin/sh
+if ! /usr/bin/which -s rbenv; then exit; fi
+
 LATEST=`rbenv install -l | grep '^\d' | tail -1`
 GLOBAL=`rbenv global`
 

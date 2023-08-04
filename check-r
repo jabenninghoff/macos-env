@@ -1,4 +1,6 @@
 #!/bin/sh
+if ! /usr/bin/which -s rig; then exit; fi
+
 LATEST=`rig resolve release --json | jq -r '.[-1].version'`
 GLOBAL=`rig list --json | jq -r '.[-1].version'`
 

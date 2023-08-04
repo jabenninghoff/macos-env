@@ -1,4 +1,6 @@
 #!/bin/sh
+if ! /usr/bin/which -s pyenv; then exit; fi
+
 LATEST=`pyenv latest -k 3`
 GLOBAL=`pyenv global`
 
