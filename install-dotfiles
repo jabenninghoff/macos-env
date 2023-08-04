@@ -16,3 +16,7 @@ for f in *
 do
 	link bin/dotfiles/$f $HOME/$.f
 done
+
+# R install
+mkdir $HOME/.R
+link ../bin/R/Makevars $HOME/.R/Makevars

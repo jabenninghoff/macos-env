@@ -1,0 +1,35 @@
+# adapted from https://github.com/Rdatatable/data.table/wiki/Installation
+# https://firas.io/posts/data_table_openmp/
+# and https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#Using-Makevars
+
+# CC is set in ${R_HOME}/etc/Makeconf
+ifeq "$(CC)" "clang -arch arm64"
+HOMEBREW_PREFIX=/opt/homebrew
+else
+HOMEBREW_PREFIX=/usr/local
+endif
+
+# libomp is keg only, set flags per libomp caveats
+LDFLAGS+=-L$(HOMEBREW_PREFIX)/opt/libomp/lib
+CPPFLAGS+=-I$(HOMEBREW_PREFIX)/opt/libomp/include
+
+LDFLAGS+=-lomp
+
+# Flags for OpenMP support that should allow packages that want to use
+# OpenMP to do so (data.table), and other packages that bork with
+# -fopenmp flag (stringi) to be left alone
+SHLIB_OPENMP_CFLAGS=-Xclang -fopenmp
+SHLIB_OPENMP_CXXFLAGS=-Xclang -fopenmp
+SHLIB_OPENMP_CXX98FLAGS=-Xclang -fopenmp
+SHLIB_OPENMP_CXX11FLAGS=-Xclang -fopenmp
+SHLIB_OPENMP_CXX14FLAGS=-Xclang -fopenmp
+SHLIB_OPENMP_CXX17FLAGS=-Xclang -fopenmp
+SHLIB_OPENMP_FCFLAGS=-Xclang -fopenmp
+SHLIB_OPENMP_FFLAGS=-Xclang -fopenmp
+
+# adapted from https://www.cynkra.com/blog/2021-03-16-gfortran-macos/
+FC=$(HOMEBREW_PREFIX)/bin/gfortran
+F77=$(HOMEBREW_PREFIX)/bin/gfortran
+FLIBS=-L$(HOMEBREW_PREFIX)/lib/gcc/current
+
+FLIBS+=-lgfortran -lquadmath
