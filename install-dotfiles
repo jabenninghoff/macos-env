@@ -14,7 +14,7 @@ function link {
 cd $HOME/bin/dotfiles
 for f in *
 do
-	link bin/dotfiles/$f $HOME/$.f
+	link bin/dotfiles/$f $HOME/.$f
 done
 
 # R install
