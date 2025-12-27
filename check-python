@@ -1,15 +1,16 @@
 #!/bin/sh
 if ! /usr/bin/which -s pyenv; then exit; fi
 
-LATEST=`pyenv latest -k 3`
-GLOBAL=`pyenv global`
+LATEST=$(pyenv latest -k 3)
+GLOBAL=$(pyenv global)
 
-if [ "x${GLOBAL}" == "x${LATEST}" ]
+if [ "$GLOBAL" = "$LATEST" ]
 then
 	exit 0
 else
-	echo "installed python version (${GLOBAL}) does not match latest version (${LATEST})"
-	echo "to install:\n  pyenv install ${LATEST} && pyenv global ${LATEST}"
-	echo "or:\n  brew pyenv-sync && pyenv global ${LATEST}\n"
+	printf "installed python version (%s) does not match latest version (%s)\n" "$GLOBAL" "$LATEST"
+	printf "to install:\n  pyenv install %s && pyenv global %s\n" "$LATEST" "$LATEST"
+	printf "or:\n  brew pyenv-sync && pyenv global %s\n\n" "$LATEST"
+	printf "brew pyenv-sync && pyenv global %s"  "$LATEST" | pbcopy
 	exit 1
 fi

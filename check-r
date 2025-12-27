@@ -1,17 +1,19 @@
 #!/bin/sh
 if ! /usr/bin/which -s rig; then exit; fi
 
-LATEST=`rig resolve release --json | jq -r '.[-1].version'`
-GLOBAL=`rig list --json | jq -r '.[-1].version'`
-NEWVER="${LATEST%.*}-`uname -m`"
+LATEST=$(rig resolve release --json | jq -r '.[-1].version')
+GLOBAL=$(rig list --json | jq -r '.[-1].version')
+NEWVER="${LATEST%.*}-$(uname -m)"
 
-if [ "x${GLOBAL}" == "x${LATEST}" ]
+
+if [ "$GLOBAL" = "$LATEST" ]
 then
 	exit 0
 else
-	echo "installed R version (${GLOBAL}) does not match latest version (${LATEST})"
-	echo "to install:\n  rig install --without-pak ${LATEST} && rig default ${NEWVER}"
-	echo "post-install:"
-	echo "  sudo chown -R \`whoami\`:admin /Library/Frameworks/R.framework/Versions/${NEWVER}/Resources/library\n"
+	printf "installed R version (%s) does not match latest version (%s)\n" "$GLOBAL" "$LATEST"
+	printf "to install:\n  rig install --without-pak %s && rig default %s\n" "$LATEST" "$NEWVER"
+	printf "post-install:\n"
+	printf "  sudo chown -R \`whoami\`:admin /Library/Frameworks/R.framework/Versions/%s/Resources/library\n\n" "$NEWVER"
+	printf "rig install --without-pak %s && rig default %s && sudo chown -R \`whoami\`:admin /Library/Frameworks/R.framework/Versions/%s/Resources/library" "$LATEST" "$NEWVER" "$NEWVER"| pbcopy
 	exit 1
 fi
