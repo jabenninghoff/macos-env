@@ -1,14 +1,22 @@
+# macOS .R/Makevars
 # adapted from https://github.com/Rdatatable/data.table/wiki/Installation
 # https://firas.io/posts/data_table_openmp/
 # and https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#Using-Makevars
 
-# CC is set in ${R_HOME}/etc/Makeconf
-ifeq "$(CC)" "clang -arch arm64"
+# CPPFLAGS is set in ${R_HOME}/etc/Makeconf and is set to "-I/opt/R/arm64/include" for ARM versions of R (>= 4.1)
+# we use this to determine the (default) HOMEBREW_PREFIX for each architecture
+ifeq "$(CPPFLAGS)" "-I/opt/R/arm64/include"
 HOMEBREW_PREFIX=/opt/homebrew
 else
 HOMEBREW_PREFIX=/usr/local
 endif
 
+# include homebrew installed libraries
+# https://stackoverflow.com/questions/79740057/libintl-h-not-found-when-installing-matrix-with-renv
+LDFLAGS+=-L$(HOMEBREW_PREFIX)/lib
+CPPFLAGS+=-I$(HOMEBREW_PREFIX)/include
+
+# install libomp with `brew install libomp`
 # libomp is keg only, set flags per libomp caveats
 LDFLAGS+=-L$(HOMEBREW_PREFIX)/opt/libomp/lib
 CPPFLAGS+=-I$(HOMEBREW_PREFIX)/opt/libomp/include
@@ -27,9 +35,23 @@ SHLIB_OPENMP_CXX17FLAGS=-Xclang -fopenmp
 SHLIB_OPENMP_FCFLAGS=-Xclang -fopenmp
 SHLIB_OPENMP_FFLAGS=-Xclang -fopenmp
 
+# gfortran is included with `brew install gcc`
 # adapted from https://www.cynkra.com/blog/2021-03-16-gfortran-macos/
-FC=$(HOMEBREW_PREFIX)/bin/gfortran
-F77=$(HOMEBREW_PREFIX)/bin/gfortran
-FLIBS=-L$(HOMEBREW_PREFIX)/lib/gcc/current
-
-FLIBS+=-lgfortran -lquadmath
+# with help from https://cran.r-project.org/doc/manuals/r-release/R-admin.html#macOS-packages
+# and https://github.com/r-lib/rig/issues/207
+# note: ignore linker duplicate libraries warning per https://github.com/orgs/Homebrew/discussions/4794
+# -lemutls_w added here: https://github.com/wch/r-source/commit/22fab0d7a9f50afd4960e68d57bea137a004f03e
+#
+# CRAN uses specific gfortran binaries from https://mac.r-project.org/tools/:
+#
+# - gfortran 4.2.3 for R 3.6 (https://cran.r-project.org/bin/macosx/tools/)
+# - gfortran 8.2 for intel R 4.0 through 4.2 (https://github.com/fxcoudert/gfortran-for-macOS)
+# - gfortran 11.0.0 for arm64 R 4.1 (https://mac.r-project.org/libs-arm64/gfortran-f51f1da0-darwin20.0-arm64.tar.gz)
+# - gfortran 12.0.1 for arm64 R 4.2 (https://github.com/R-macos/gcc-darwin-arm64)
+# - gfortran-12.2-universal.pkg for R 4.3 and 4.4 (https://github.com/R-macos/gcc-12-branch)
+# - gfortran-14.2-universal.pkg (r-gfortran) for R 4.5 and newer (https://github.com/R-macos/gcc-14-branch)
+#
+# uncomment the following lines when using homebrew gfortran
+#FC=$(HOMEBREW_PREFIX)/bin/gfortran
+#F77=$(HOMEBREW_PREFIX)/bin/gfortran
+#FLIBS=-L$(HOMEBREW_PREFIX)/lib/gcc/current -lgfortran -lquadmath
