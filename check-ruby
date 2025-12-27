@@ -1,15 +1,16 @@
 #!/bin/sh
 if ! /usr/bin/which -s rbenv; then exit; fi
 
-LATEST=`rbenv install -l | grep '^\d' | tail -1`
-GLOBAL=`rbenv global`
+LATEST=$(rbenv install -l | grep '^\d' | tail -1)
+GLOBAL=$(rbenv global)
 
-if [ "x${GLOBAL}" == "x${LATEST}" ]
+if [ "$GLOBAL" = "$LATEST" ]
 then
 	exit 0
 else
-	echo "installed ruby version (${GLOBAL}) does not match latest version (${LATEST})"
-	echo "to install:\n  rbenv install ${LATEST} && rbenv global ${LATEST}"
-	echo "or:\n  brew rbenv-sync && rbenv global ${LATEST}\n"
+	printf "installed ruby version (%s) does not match latest version (%s)\n" "$GLOBAL" "$LATEST"
+	printf "to install:\n  rbenv install %s && rbenv global %s\n" "$LATEST" "$LATEST"
+	printf "or:\n  brew rbenv-sync && rbenv global %s\n\n" "$LATEST"
+	printf "brew rbenv-sync && rbenv global %s" "$LATEST" | pbcopy
 	exit 1
 fi
