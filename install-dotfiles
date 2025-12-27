@@ -1,9 +1,9 @@
 #!/bin/sh
 # set -ex # halt script on error, echo on
 
-function link {
-	local source="${1}"
-	local target="${2}"
+link() {
+	source="${1}"
+	target="${2}"
 
 	if [ ! -e "${target}" ]
 	then
@@ -11,12 +11,12 @@ function link {
 	fi
 }
 
-cd $HOME/bin/dotfiles
+cd "$HOME"/bin/dotfiles || exit
 for f in *
 do
-	link bin/dotfiles/$f $HOME/.$f
+	link bin/dotfiles/"$f" "$HOME"/."$f"
 done
 
 # R install
-mkdir $HOME/.R
-link ../bin/R/Makevars $HOME/.R/Makevars
+mkdir "$HOME"/.R
+link ../bin/R/Makevars "$HOME"/.R/Makevars
