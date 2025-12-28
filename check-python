@@ -11,6 +11,6 @@ else
 	printf "installed python version (%s) does not match latest version (%s)\n" "$GLOBAL" "$LATEST"
 	printf "to install:\n  pyenv install %s && pyenv global %s\n" "$LATEST" "$LATEST"
 	printf "or:\n  brew pyenv-sync && pyenv global %s\n\n" "$LATEST"
-	printf "brew pyenv-sync && pyenv global %s"  "$LATEST" | pbcopy
+	printf "brew pyenv-sync && pyenv global %s" "$LATEST" | pbcopy
 	exit 1
 fi
