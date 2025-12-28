@@ -5,7 +5,6 @@ LATEST=$(rig resolve release --json | jq -r '.[-1].version')
 GLOBAL=$(rig list --json | jq -r '.[-1].version')
 NEWVER="${LATEST%.*}-$(uname -m)"
 
-
 if [ "$GLOBAL" = "$LATEST" ]
 then
 	exit 0
