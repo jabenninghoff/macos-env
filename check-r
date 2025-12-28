@@ -13,6 +13,6 @@ else
 	printf "to install:\n  rig install --without-pak %s && rig default %s\n" "$LATEST" "$NEWVER"
 	printf "post-install:\n"
 	printf "  sudo chown -R \`whoami\`:admin /Library/Frameworks/R.framework/Versions/%s/Resources/library\n\n" "$NEWVER"
-	printf "rig install --without-pak %s && rig default %s && sudo chown -R \`whoami\`:admin /Library/Frameworks/R.framework/Versions/%s/Resources/library" "$LATEST" "$NEWVER" "$NEWVER"| pbcopy
+	printf "rig install --without-pak %s && rig default %s && sudo chown -R \`whoami\`:admin /Library/Frameworks/R.framework/Versions/%s/Resources/library" "$LATEST" "$NEWVER" "$NEWVER" | pbcopy
 	exit 1
 fi
