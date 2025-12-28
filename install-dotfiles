@@ -18,5 +18,5 @@ do
 done
 
 # R install
-mkdir "$HOME"/.R
+mkdir -p "$HOME"/.R
 link ../bin/R/Makevars "$HOME"/.R/Makevars
