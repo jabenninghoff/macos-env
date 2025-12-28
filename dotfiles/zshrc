@@ -19,7 +19,7 @@ then
 	export PATH="$PATH:$HOME/.lmstudio/bin"
 fi
 
-# load Github access token (if present)
+# load GitHub access token (if present)
 if [ -f "$HOME/.githubtokenrc" ]; then . "$HOME/.githubtokenrc"; fi
 
 ## other environment
