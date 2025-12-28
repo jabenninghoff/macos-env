@@ -17,8 +17,10 @@ eval "$(/usr/libexec/path_helper)"
 # https://unix.stackexchange.com/questions/725018/why-does-makewhatis-choke-on-symbolically-linked-directories-and-how-can-i-fi
 # test with `apropos foo`
 
-# remove /usr/local/bin from /etc/paths
-export PATH="$PATH:s/\/usr\/local\/bin://"
+# remove /usr/local/bin from /etc/paths, see:
+#   https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion (s/l/r[/])
+#   https://github.com/rothgar/mastering-zsh/blob/master/docs/helpers/variables.md
+export PATH="${PATH:gs/:\/usr\/local\/bin:/:}"
 
 # add homebrew to environment
 if [ -x /usr/local/bin/brew ]
