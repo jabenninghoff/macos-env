@@ -11,6 +11,11 @@ else
 	printf "installed ruby version (%s) does not match latest version (%s)\n" "$GLOBAL" "$LATEST"
 	printf "to install:\n  rbenv install %s && rbenv global %s\n" "$LATEST" "$LATEST"
 	printf "or:\n  brew rbenv-sync && rbenv global %s\n\n" "$LATEST"
-	printf "brew rbenv-sync && rbenv global %s" "$LATEST" | pbcopy
+	if [ "$(/bin/ls -F "$HOME/.rbenv/versions" | grep -c '/$')" -eq 0 ]
+	then
+		printf "brew rbenv-sync && rbenv global %s" "$LATEST" | pbcopy
+	else
+		printf "rbenv install %s && rbenv global %s" "$LATEST" "$LATEST" | pbcopy
+	fi
 	exit 1
 fi
