@@ -14,10 +14,7 @@ export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # lm-studio
-if [ -d "$HOME/.lmstudio/bin" ]
-then
-	export PATH="$PATH:$HOME/.lmstudio/bin"
-fi
+if [ -d "$HOME/.lmstudio/bin" ]; then export PATH="$PATH:$HOME/.lmstudio/bin"; fi
 
 # load GitHub access token (if present)
 if [ -f "$HOME/.githubtokenrc" ]; then . "$HOME/.githubtokenrc"; fi
@@ -46,10 +43,10 @@ if [ -f "$HOME/.brewrc" ]; then . "$HOME/.brewrc"; fi
 export HOMEBREW_CLEANUP_MAX_AGE_DAYS=36500 # set to 100 years since permanent is not an option
 alias update='brew update && brew outdated --greedy-auto-updates'
 alias upgrade='brew upgrade --greedy-auto-updates && brew cleanup'
-alias leaves='brew leaves | diff -u ~/bin/`hostname -s`-brew  - ; brew list --cask | diff -u ~/bin/`hostname -s`-cask -'
+alias leaves='brew leaves | diff -u ~/bin/$(hostname -s)-brew - ; brew list --cask | diff -u ~/bin/$(hostname -s)-cask -'
 alias check='brew doctor ; brew bundle check --global --verbose ; brew bundle cleanup --global'
 alias cleanup='brew bundle install --global && brew bundle cleanup --global --force && brew cleanup -s'
-alias fetch='brew fetch --formula `brew list --formula` && brew fetch --cask `brew list --cask`'
+alias fetch='brew fetch --formula $(brew list --formula) && brew fetch --cask $(brew list --cask)'
 
 # helpful aliases
 alias dir='ls -lAG'

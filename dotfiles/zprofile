@@ -17,11 +17,6 @@ eval "$(/usr/libexec/path_helper)"
 # https://unix.stackexchange.com/questions/725018/why-does-makewhatis-choke-on-symbolically-linked-directories-and-how-can-i-fi
 # test with `apropos foo`
 
-# remove /usr/local/bin from /etc/paths, see:
-#   https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion (s/l/r[/])
-#   https://github.com/rothgar/mastering-zsh/blob/master/docs/helpers/variables.md
-export PATH="${PATH:gs/:\/usr\/local\/bin:/:}"
-
 # add homebrew to environment
 if [ -x /usr/local/bin/brew ]
 then
@@ -46,14 +41,16 @@ then
 fi
 
 # add ruby gems
-if [ -d "$HOMEBREW_PREFIX/lib/ruby/gems/3.3.0/bin" ]
+if /usr/bin/which -s brew
 then
-	export PATH="$PATH:$HOMEBREW_PREFIX/lib/ruby/gems/3.3.0/bin"
+	RUBY_PREFIX="$(brew --prefix --installed ruby 2>/dev/null)"
+	[ -n "$RUBY_PREFIX" ] && GEM_BINDIR="$("$RUBY_PREFIX/bin/ruby" -e 'puts Gem.bindir' 2>/dev/null)"
+	[ -d "$GEM_BINDIR" ] && export PATH="$PATH:$GEM_BINDIR"
 fi
 
 # add unversioned python
 if /usr/bin/which -s brew
 then
 	PYTHON_PREFIX="$(brew --prefix --installed python 2>/dev/null)"
-	[[ "$PYTHON_PREFIX" ]] && export PATH="$PATH:${PYTHON_PREFIX}/libexec/bin"
+	[ -d "${PYTHON_PREFIX}/libexec/bin" ] && export PATH="$PATH:${PYTHON_PREFIX}/libexec/bin"
 fi
